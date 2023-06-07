@@ -77,5 +77,5 @@ print("Loading Slur...")
 time.sleep(3)
 
 excel_file_name = merged_value
-workbook.save(excel_file_name)
+workbook.save(excel_file_name+'.xlsx')
 print(f"Excel file '{excel_file_name}' sukses di export gan.")
