@@ -1,20 +1,19 @@
 import os
+import time
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
-
 folder_name = "png"
-
 folder_path = os.path.join(script_directory, folder_name)
 
 png_files = [file for file in os.listdir(folder_path) if file.endswith(".png")]
 
-time = [file[8:-9].replace('_', ':') if file.endswith("_Full.png") else file for file in png_files]
+file_time = [file[8:-9].replace('_', ':') if file.endswith("_Full.png") else file for file in png_files]
 
 defineTime = []
-for t in time:
+for t in file_time:
     if '06:00:00' <= t <= '18:00:00':
         defineTime.append('PAGI')
     else:
@@ -25,7 +24,7 @@ sheet = workbook.active
 
 sheet.merge_cells("A1:J2")
 
-merged_value = "Nama File Label Img Hari /Bulan / Tahun"
+merged_value = input("Masukan Judul Excel: ")
 sheet["A1"].value = merged_value
 
 sheet["A1"].alignment = Alignment(horizontal="center", vertical="center")
@@ -74,5 +73,9 @@ for row in sheet.iter_rows(min_row=4, max_row=sheet.max_row, min_col=1, max_col=
         if column_1_value:
             cell.border = border
 
-excel_file_name = "tagged.xlsx"
+print("Loading Slur...")
+time.sleep(3)
+
+excel_file_name = merged_value
 workbook.save(excel_file_name)
+print(f"Excel file '{excel_file_name}' sukses di export gan.")
