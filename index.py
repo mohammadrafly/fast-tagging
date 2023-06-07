@@ -11,8 +11,14 @@ folder_path = os.path.join(script_directory, folder_name)
 
 png_files = [file for file in os.listdir(folder_path) if file.endswith(".png")]
 
-#for future use
-time = [file[8:-9] if file.endswith("_Full.png") else file for file in png_files]
+time = [file[8:-9].replace('_', ':') if file.endswith("_Full.png") else file for file in png_files]
+
+defineTime = []
+for t in time:
+    if '06:00:00' <= t <= '18:00:00':
+        defineTime.append('PAGI')
+    else:
+        defineTime.append('MALAM')
 
 workbook = Workbook()
 sheet = workbook.active
@@ -56,19 +62,16 @@ for index, file_name in enumerate(png_files, start=1):
     number += 0
     sheet.cell(row=index + 3, column=1, value=number)
     sheet.cell(row=index + 3, column=2, value=file_name)
+    sheet.cell(row=index + 3, column=10, value=defineTime[index - 1])
 
-# Add borders to cells in columns C to J based on column 1
 for row in sheet.iter_rows(min_row=4, max_row=sheet.max_row, min_col=1, max_col=len(header_values)):
     for cell in row:
         row_number = cell.row
         column_number = cell.column
 
-        # Get the value from column 1 for the current row
         column_1_value = sheet.cell(row=row_number, column=1).value
 
-        # Check if column 1 value is not empty
         if column_1_value:
-            # Apply borders to the cells in columns C to J
             cell.border = border
 
 excel_file_name = "tagged.xlsx"
